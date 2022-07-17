@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config';
 import { StoreModule } from './store/store.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
-import { LinkModule } from './link/link.module';
 import { PictureModule } from './picture/picture.module';
 import { ColorsModule } from './colors/colors.module';
 import { ScentModule } from './scent/scent.module';
@@ -18,9 +17,18 @@ import { PaymentModule } from './payment/payment.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL,
+      url:
+        process.env.NODE_ENV == 'prod'
+          ? process.env.DATABASE_URLPROD
+          : process.env.DATABASE_URLPROD,
       autoLoadEntities: true,
       synchronize: true,
+      ssl: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     }),
 
     CategorieModule,
@@ -30,8 +38,6 @@ import { PaymentModule } from './payment/payment.module';
     ProductModule,
 
     OrderModule,
-
-    LinkModule,
 
     PictureModule,
 

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Categorie } from 'src/categorie/entities/categorie.entity';
 import { TimesTampEntities } from 'src/commons/generics/timestamps';
 import { Order } from 'src/order/entities/order.entity';
@@ -18,12 +19,23 @@ export class Payment extends TimesTampEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty({
+    type: String,
+    required: true,
+  })
   @Column({ type: 'string' })
   order_id: string;
 
+  @ApiProperty({
+    type: Number,
+  })
   @Column({})
   price: number;
 
+  @ApiProperty({
+    type: Number,
+    default: 0,
+  })
   @Column({ default: 0 })
   status: number;
 

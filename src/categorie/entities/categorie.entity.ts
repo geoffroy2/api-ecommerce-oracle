@@ -44,7 +44,9 @@ export class Categorie extends TimesTampEntities {
   @Column({ nullable: true })
   store_id: string;
 
-  @OneToMany(() => Product, (product) => product.categorie)
+  @OneToMany(() => Product, (product) => product.categorie, {
+    eager: true,
+  })
   @JoinColumn({
     referencedColumnName: 'id',
     name: 'id',

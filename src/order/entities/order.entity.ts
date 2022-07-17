@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { TimesTampEntities } from 'src/commons/generics/timestamps';
-import { Link } from 'src/link/entities/link.entity';
 import { Payment } from 'src/payment/entities/payment.entity';
 import {
   Column,

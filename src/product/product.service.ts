@@ -104,4 +104,8 @@ export class ProductService {
   async getOneScent(id: string): Promise<Scent> {
     return await this.scentService.findOne(id);
   }
+
+  async getImage(name: string): Promise<Product> {
+    return await this.productRepository.findOneBy({ image: name });
+  }
 }

@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UploadedFiles,
   Req,
+  Res,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -153,7 +154,7 @@ export class ProductController {
       createProductDto.image = files.image[0].filename;
       createProductDto.image_url = `${req.protocol}://${req.get(
         'Host',
-      )}/store/${files.image[0].path}`;
+      )}/product/${files.image[0].path}`;
     }
 
     const product = await this.productService.create(createProductDto);
@@ -161,7 +162,10 @@ export class ProductController {
     // insert picture
     for (let index = 0; index < files.pictures.length; index++) {
       const filename = files.pictures[index].filename;
-      await this.pictureService.create(filename);
+      const image_url = `${req.protocol}://${req.get('Host')}/product/${
+        files.pictures[index].path
+      }`;
+      await this.pictureService.create(filename, image_url, product.id);
     }
 
     return product;
@@ -186,6 +190,13 @@ export class ProductController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);
+  }
+
+  @Get('images/:image')
+  async getImage(@Param('image') image: string, @Res() res) {
+    console.log(this.productService.getImage(image));
+    const product: Product = await this.productService.getImage(image);
+    return res.sendFile(product.image, { root: './images' });
   }
 
   @ApiCreatedResponse({ type: Product })
@@ -268,7 +279,6 @@ export class ProductController {
     return this.productService.update(id, updateProductDto);
   }
 
-  @Delete(':id')
   @ApiOperation({ summary: 'Remove Product' })
   @ApiResponse({ status: 204, description: 'Product remove' })
   @ApiResponse({

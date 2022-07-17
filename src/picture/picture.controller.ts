@@ -11,14 +11,19 @@ import { PictureService } from './picture.service';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
 import { Picture } from './entities/picture.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('/picture')
 @Controller('picture')
 export class PictureController {
   constructor(private readonly pictureService: PictureService) {}
 
   @Post()
-  async create(@Body() title: string): Promise<Picture> {
-    return this.pictureService.create(title);
+  async create(@Body() body: any): Promise<Picture> {
+    const title = body.title;
+    const product_id = body.product_id;
+    const image_url = body.image_url;
+    return this.pictureService.create(title, image_url, product_id);
   }
 
   @Get()

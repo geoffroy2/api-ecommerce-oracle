@@ -11,8 +11,16 @@ export class PictureService {
     @InjectRepository(Picture)
     private pictureRepositoy: Repository<Picture>,
   ) {}
-  async create(title: string): Promise<Picture> {
-    const newPicture = this.pictureRepositoy.create({ title: title });
+  async create(
+    title: string,
+    image_url: string,
+    product_id: string,
+  ): Promise<Picture> {
+    const newPicture = this.pictureRepositoy.create({
+      title: title,
+      image_url: image_url,
+      product_id: product_id,
+    });
     return await this.pictureRepositoy.save(newPicture);
   }
 

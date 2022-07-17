@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Req,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Helper } from 'src/commons/shared/helpers';
@@ -91,6 +92,13 @@ export class CategorieController {
   findOne(@Param('id') id: string) {
     console.log('identifiant', id);
     return this.categorieService.findOne(id);
+  }
+
+  @Get('images/:image')
+  async getImage(@Param('image') image: string, @Res() res) {
+    console.log(this.categorieService.getImage(image));
+    const categorie: Categorie = await this.categorieService.getImage(image);
+    return res.sendFile(categorie.image, { root: './images' });
   }
 
   @ApiConsumes('multipart/form-data')

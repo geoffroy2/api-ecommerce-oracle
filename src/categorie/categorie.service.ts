@@ -66,4 +66,8 @@ export class CategorieService {
     await Helper.deleteFile(categorie.image);
     return await this.categorieRepository.remove(categorie);
   }
+
+  async getImage(name: string): Promise<Categorie> {
+    return await this.categorieRepository.findOneBy({ image: name });
+  }
 }

@@ -90,7 +90,6 @@ export class Product extends TimesTampEntities {
   @ManyToOne(() => Categorie, (categorie) => categorie.products, {
     cascade: true,
     nullable: true,
-    eager: true,
   })
   @JoinColumn({
     name: 'category_id',
