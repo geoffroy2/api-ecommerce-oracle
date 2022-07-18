@@ -77,11 +77,11 @@ export class Product extends TimesTampEntities {
   @Column({ default: 0 })
   quantity: number;
 
-  @OneToMany(() => Picture, (picture) => picture.product)
-  @JoinColumn({
-    referencedColumnName: 'id',
-    name: 'id',
-  })
+  @OneToMany(() => Picture, (picture) => picture.product, { eager: true })
+  // @JoinColumn({
+  //   referencedColumnName: 'id',
+  //   name: 'id',
+  // })
   pictures: Picture[];
 
   @Column({ nullable: true })
@@ -97,7 +97,9 @@ export class Product extends TimesTampEntities {
   })
   categorie: Categorie;
 
-  @ManyToMany(() => Color)
+  @ManyToMany(() => Color, {
+    eager: true,
+  })
   @JoinTable({
     name: 'color_products',
     joinColumn: { name: 'product_id', referencedColumnName: 'id' },
