@@ -101,6 +101,17 @@ export class CategorieController {
     return res.sendFile(categorie.image, { root: './images' });
   }
 
+  @Get('store/:id')
+  @ApiOkResponse({
+    type: Categorie,
+    isArray: true,
+    description: 'categorie found',
+  })
+  @ApiOperation({ summary: 'Get find Categorie by Store' })
+  categoryByStore(@Param('id') id: string) {
+    return this.categorieService.getCategorieByStore(id);
+  }
+
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {

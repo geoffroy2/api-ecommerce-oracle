@@ -186,7 +186,7 @@ export class ProductController {
   }
 
   @ApiOkResponse({ type: Product })
-  @ApiOperation({ summary: 'Get one Categorie' })
+  @ApiOperation({ summary: 'Get one Product' })
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(id);
@@ -197,6 +197,13 @@ export class ProductController {
     console.log(this.productService.getImage(image));
     const product: Product = await this.productService.getImage(image);
     return res.sendFile(product.image, { root: './images' });
+  }
+
+  @ApiOkResponse({ type: Product })
+  @ApiOperation({ summary: 'Get  product by categorie' })
+  @Get('categorie/:id')
+  productByCtagorie(@Param('id') id: string) {
+    return this.productService.getProductByCategorie(id);
   }
 
   @ApiCreatedResponse({ type: Product })

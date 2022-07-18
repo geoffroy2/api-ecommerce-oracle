@@ -67,6 +67,14 @@ export class CategorieService {
     return await this.categorieRepository.remove(categorie);
   }
 
+  async getCategorieByStore(store_id: string): Promise<Categorie[]> {
+    return await this.categorieRepository.find({
+      where: {
+        store_id: store_id,
+      },
+    });
+  }
+
   async getImage(name: string): Promise<Categorie> {
     return await this.categorieRepository.findOneBy({ image: name });
   }
