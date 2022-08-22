@@ -10,6 +10,7 @@ import {
   UploadedFile,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Helper } from 'src/commons/shared/helpers';
@@ -31,6 +32,8 @@ import {
 } from '@nestjs/swagger';
 import { Categorie } from './entities/categorie.entity';
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentStore } from 'src/shared/auth/decorators/current-store.decorators';
 
 @ApiTags('/categories')
 @Controller('categorie')
@@ -65,6 +68,7 @@ export class CategorieController {
       }),
     }),
   )
+  @UseGuards(AuthGuard())
   @Post()
   create(
     @Body() createCategorieDto: CreateCategorieDto,
@@ -80,10 +84,11 @@ export class CategorieController {
     return this.categorieService.create(createCategorieDto);
   }
 
+  @UseGuards(AuthGuard())
   @ApiOkResponse({ type: Categorie, isArray: true })
   @ApiOperation({ summary: 'Get All Categorie' })
   @Get()
-  findAll() {
+  findAll(@CurrentStore() store) {
     return this.categorieService.findAll();
   }
 
@@ -96,6 +101,7 @@ export class CategorieController {
     return this.categorieService.findOne(id);
   }
 
+  @UseGuards(AuthGuard())
   @Get('images/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.categorieService.getImage(image));
@@ -103,6 +109,7 @@ export class CategorieController {
     return res.sendFile(categorie.image, { root: './images' });
   }
 
+  @UseGuards(AuthGuard())
   @Get('store/:id')
   @ApiOkResponse({
     type: Categorie,
@@ -133,6 +140,7 @@ export class CategorieController {
   })
   @ApiOkResponse({ type: Categorie, description: 'categorie updated' })
   @ApiOperation({ summary: 'Updated Categorie' })
+  @UseGuards(AuthGuard())
   @Patch(':id')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -158,7 +166,7 @@ export class CategorieController {
     }
     return this.categorieService.update(id, updateCategorieDto);
   }
-
+  @UseGuards(AuthGuard())
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Categorie' })
   @ApiResponse({ status: 204, description: 'Categorie remove' })
