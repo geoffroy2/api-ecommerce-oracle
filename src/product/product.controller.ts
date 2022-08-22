@@ -11,6 +11,7 @@ import {
   UploadedFiles,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -42,6 +43,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Product } from './entities/product.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentStore } from 'src/shared/auth/decorators/current-store.decorators';
 
 @ApiTags('/product')
 @Controller('product')
@@ -178,6 +181,15 @@ export class ProductController {
     return this.productService.findAll();
   }
 
+  @UseGuards(AuthGuard())
+  @ApiOkResponse({ type: Product, isArray: true })
+  @ApiOperation({ summary: 'Get All Product by current Store' })
+  @Get('current-store-product')
+  findProductByCurrentStore(@CurrentStore() store) {
+    const storeId = store.userId;
+    return this.productService.findProductByCurrentStore(storeId);
+  }
+
   @ApiOkResponse()
   @ApiOperation({ summary: 'Deleted All Categorie' })
   @Get('deleteAll')
@@ -208,6 +220,7 @@ export class ProductController {
     return this.productService.getProductByCategorie(id);
   }
 
+  @UseGuards(AuthGuard())
   @ApiCreatedResponse({ type: Product })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -263,6 +276,7 @@ export class ProductController {
       pictures?: Express.Multer.File[];
     },
     @Req() req: Request,
+    @CurrentStore() store,
   ) {
     if (files) {
       if (files.image[0].filename != '') {
@@ -297,10 +311,11 @@ export class ProductController {
       }
       updateProductDto.scents = this.scents;
     }
-
-    return this.productService.update(id, updateProductDto);
+    const storeId = store.userId;
+    return this.productService.update(id, updateProductDto, storeId);
   }
 
+  @UseGuards(AuthGuard())
   @ApiOperation({ summary: 'Remove Product' })
   @ApiResponse({ status: 204, description: 'Product remove' })
   @ApiResponse({
@@ -308,7 +323,8 @@ export class ProductController {
     description: 'Product not found',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(id);
+  remove(@Param('id') id: string, @CurrentStore() store) {
+    const storeId = store.userId;
+    return this.productService.remove(id, storeId);
   }
 }

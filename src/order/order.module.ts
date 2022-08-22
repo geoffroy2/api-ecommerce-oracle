@@ -8,9 +8,14 @@ import { OrderItem } from './entities/order_items';
 import { ScentModule } from 'src/scent/scent.module';
 import { ColorsModule } from 'src/colors/colors.module';
 import { ProductModule } from 'src/product/product.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Order, OrderItem]), ProductModule],
+  imports: [
+    TypeOrmModule.forFeature([Order, OrderItem]),
+    ProductModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+  ],
   controllers: [OrderController],
   providers: [OrderService],
 })

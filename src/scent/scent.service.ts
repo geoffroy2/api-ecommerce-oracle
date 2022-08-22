@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -36,21 +37,29 @@ export class ScentService {
     return scent;
   }
 
-  async update(id: string, updateScentDto: UpdateScentDto) {
+  async update(id: string, updateScentDto: UpdateScentDto, storeId: string) {
     const scent = await this.findOne(id);
-    const status = updateScentDto.status;
-    const title = updateScentDto.title;
-    return await this.scentRepository.update(
-      { id: id },
-      { status: status, title: title },
-    );
+    if (storeId === scent.products[0].categorie.store_id) {
+      const status = updateScentDto.status;
+      const title = updateScentDto.title;
+      return await this.scentRepository.update(
+        { id: id },
+        { status: status, title: title },
+      );
+    } else {
+      throw new ForbiddenException('Vous avez pas les droits de supprimer');
+    }
   }
 
-  async remove(id: string) {
+  async remove(id: string, storeId: string) {
     const scent = await this.findOne(id);
-    await this.scentRepository.remove(scent);
-    return {
-      message: 'Scent deleted',
-    };
+    if (storeId === scent.products[0].categorie.store_id) {
+      await this.scentRepository.remove(scent);
+      return {
+        message: 'Scent deleted',
+      };
+    } else {
+      throw new ForbiddenException('Vous avez pas les droits de supprimer');
+    }
   }
 }

@@ -1,4 +1,10 @@
-import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateOrderDto {
   @IsNotEmpty()
@@ -16,6 +22,10 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsNumber()
   statut: number;
+
+  @IsOptional()
+  @IsString()
+  store_id: string;
 
   @IsNotEmpty()
   @IsArray()

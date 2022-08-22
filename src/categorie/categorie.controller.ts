@@ -88,8 +88,21 @@ export class CategorieController {
   @ApiOkResponse({ type: Categorie, isArray: true })
   @ApiOperation({ summary: 'Get All Categorie' })
   @Get()
-  findAll(@CurrentStore() store) {
+  findAll() {
     return this.categorieService.findAll();
+  }
+
+  @UseGuards(AuthGuard())
+  @Get('current_store/')
+  @ApiOkResponse({
+    type: Categorie,
+    isArray: true,
+    description: 'categorie found',
+  })
+  @ApiOperation({ summary: 'Get find Categorie by Current Store' })
+  categoryCuurentStore(@CurrentStore() store) {
+    const storeId = store.userId;
+    return this.categorieService.getCategorieCurrentStore(storeId);
   }
 
   @Get(':id')
@@ -155,6 +168,7 @@ export class CategorieController {
     @Body() updateCategorieDto: UpdateCategorieDto,
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
+    @CurrentStore() store,
   ) {
     if (file) {
       if (file.filename != '') {
@@ -164,7 +178,8 @@ export class CategorieController {
         )}/categorie/${file.path}`;
       }
     }
-    return this.categorieService.update(id, updateCategorieDto);
+    const storeId = store.userId;
+    return this.categorieService.update(id, updateCategorieDto, storeId);
   }
   @UseGuards(AuthGuard())
   @Delete(':id')
@@ -175,7 +190,8 @@ export class CategorieController {
     description: 'Categorie not found',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categorieService.remove(id);
+  remove(@Param('id') id: string, @CurrentStore() store) {
+    const storeId = store.userId;
+    return this.categorieService.remove(id, storeId);
   }
 }

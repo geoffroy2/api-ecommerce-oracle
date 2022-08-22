@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,6 +22,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Order } from './entities/order.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentStore } from 'src/shared/auth/decorators/current-store.decorators';
 
 @ApiTags('/order')
 @Controller('order')
@@ -55,6 +58,13 @@ export class OrderController {
     return this.orderService.findAll();
   }
 
+  @UseGuards(AuthGuard())
+  @ApiOperation({ summary: 'Get All Order' })
+  @ApiOkResponse({ type: Order, isArray: true })
+  @Get('current-store-order')
+  findCurrentStoreOrder(@CurrentStore() store) {
+    return this.orderService.findCurrentStoreOrder(store.userId);
+  }
   @ApiOperation({ summary: 'Get find Order' })
   @Get(':id')
   @ApiOkResponse({ type: Order, description: 'order found' })
@@ -62,6 +72,7 @@ export class OrderController {
     return this.orderService.findOne(id);
   }
 
+  @UseGuards(AuthGuard())
   @ApiCreatedResponse({ type: Order })
   @ApiBody({
     schema: {
@@ -79,10 +90,15 @@ export class OrderController {
   @ApiOkResponse({ type: Order, description: 'Order Update' })
   @ApiBadRequestResponse()
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(id, updateOrderDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+    @CurrentStore() store,
+  ) {
+    return this.orderService.update(id, updateOrderDto, store.userId);
   }
 
+  @UseGuards(AuthGuard())
   @ApiCreatedResponse({ type: Order })
   @ApiBody({
     schema: {
@@ -96,10 +112,15 @@ export class OrderController {
   @ApiOkResponse({ type: Order, description: 'Order Update statut' })
   @ApiBadRequestResponse()
   @Patch('change_status/:id')
-  changeStatus(@Param('id') id: string, @Body() statut: number) {
-    return this.orderService.changeStatus(id, statut);
+  changeStatus(
+    @Param('id') id: string,
+    @Body() statut: number,
+    @CurrentStore() store,
+  ) {
+    return this.orderService.changeStatus(id, statut, store.userId);
   }
 
+  @UseGuards(AuthGuard())
   @Delete(':id')
   @ApiOperation({ summary: 'Remove Order' })
   @ApiResponse({ status: 204, description: 'Order remove' })
@@ -107,7 +128,7 @@ export class OrderController {
     status: 404,
     description: 'Order not found',
   })
-  remove(@Param('id') id: string) {
-    return this.orderService.remove(id);
+  remove(@Param('id') id: string, @CurrentStore() store) {
+    return this.orderService.remove(id, store.userId);
   }
 }

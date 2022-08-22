@@ -1,7 +1,9 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Helper } from 'src/commons/shared/helpers';
@@ -51,23 +53,44 @@ export class CategorieService {
   async update(
     id: string,
     updateCategorieDto: UpdateCategorieDto,
+    storeId: string,
   ): Promise<Categorie> {
     const categorie = await this.findOne(id);
-    if (updateCategorieDto.image != '') {
-      console.log('deleted categories');
-      await Helper.deleteFile(categorie.image);
+    if (storeId == categorie.store_id) {
+      if (updateCategorieDto.image != '') {
+        console.log('deleted categories');
+        await Helper.deleteFile(categorie.image);
+      }
+      const data = Object.assign(categorie, updateCategorieDto);
+      return await this.categorieRepository.save(data);
+    } else {
+      throw new ForbiddenException(
+        'Vous etes pas autoriser à modifier cette catégorie',
+      );
     }
-    const data = Object.assign(categorie, updateCategorieDto);
-    return await this.categorieRepository.save(data);
   }
 
-  async remove(id: string) {
+  async remove(id: string, storeId: string) {
     const categorie = await this.findOne(id);
-    await Helper.deleteFile(categorie.image);
-    return await this.categorieRepository.remove(categorie);
+    if (storeId == categorie.store_id) {
+      await Helper.deleteFile(categorie.image);
+      return await this.categorieRepository.remove(categorie);
+    } else {
+      throw new ForbiddenException(
+        'Vous etes pas autoriser à supprimer cette catégorie',
+      );
+    }
   }
 
   async getCategorieByStore(store_id: string): Promise<Categorie[]> {
+    return await this.categorieRepository.find({
+      where: {
+        store_id: store_id,
+      },
+    });
+  }
+
+  async getCategorieCurrentStore(store_id: string): Promise<Categorie[]> {
     return await this.categorieRepository.find({
       where: {
         store_id: store_id,

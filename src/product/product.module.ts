@@ -9,10 +9,12 @@ import { StoreModule } from 'src/store/store.module';
 import { PictureModule } from 'src/picture/picture.module';
 import { ColorsModule } from 'src/colors/colors.module';
 import { ScentModule } from 'src/scent/scent.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     CategorieModule,
     StoreModule,
     PictureModule,

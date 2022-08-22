@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -83,6 +84,18 @@ export class OrderService {
     });
   }
 
+  async findCurrentStoreOrder(storeId: string) {
+    const orders = await this.orderRepository.find({
+      where: {
+        store_id: storeId,
+      },
+    });
+    return orders.map(function (order: Order) {
+      order.valueTotal = order.total;
+      return order;
+    });
+  }
+
   async findOne(id: string): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id: id },
@@ -93,20 +106,35 @@ export class OrderService {
     return order;
   }
 
-  async update(id: string, updateOrderDto: UpdateOrderDto): Promise<Order> {
+  async update(
+    id: string,
+    updateOrderDto: UpdateOrderDto,
+    storeId: string,
+  ): Promise<Order> {
     const order = await this.findOne(id);
-    const data = Object.assign(order, updateOrderDto);
-    return await this.orderRepository.save(data);
+    if (storeId === order.store_id) {
+      const data = Object.assign(order, updateOrderDto);
+      return await this.orderRepository.save(data);
+    } else {
+      throw new ForbiddenException('Vous avez pas le droit de suopprimers');
+    }
   }
 
-  async remove(id: string) {
+  async remove(id: string, storeId: string) {
     const order = await this.findOne(id);
-    return await this.orderRepository.remove(order);
+    if (storeId === order.store_id) {
+      return await this.orderRepository.remove(order);
+    } else {
+      throw new ForbiddenException('Vous avez pas le droit de suopprimers');
+    }
   }
 
-  async changeStatus(id: string, statut: number) {
+  async changeStatus(id: string, statut: number, storeId: string) {
     try {
-      return await this.orderRepository.update({ id: id }, { statut: statut });
+      return await this.orderRepository.update(
+        { id: id, store_id: storeId },
+        { statut: statut },
+      );
     } catch (error) {
       throw new ConflictException(error);
     }

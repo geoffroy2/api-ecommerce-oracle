@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ScentService } from './scent.service';
 import { CreateScentDto } from './dto/create-scent.dto';
@@ -20,6 +21,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Scent } from './entities/scent.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentStore } from 'src/shared/auth/decorators/current-store.decorators';
+import { Store } from 'src/store/entities/store.entity';
 
 @ApiTags('/scent')
 @Controller('scent')
@@ -55,6 +59,7 @@ export class ScentController {
     return this.scentService.findOne(id);
   }
 
+  @UseGuards(AuthGuard())
   @ApiBody({
     schema: {
       type: 'object',
@@ -65,10 +70,16 @@ export class ScentController {
   })
   @ApiOkResponse({ type: Scent, description: 'Scent updated' })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateScentDto: UpdateScentDto) {
-    return this.scentService.update(id, updateScentDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateScentDto: UpdateScentDto,
+    @CurrentStore() store,
+  ) {
+    const storeId = store.userId;
+    return this.scentService.update(id, updateScentDto, storeId);
   }
 
+  @UseGuards(AuthGuard())
   @ApiOperation({ summary: 'Remove Scent' })
   @ApiResponse({ status: 204, description: 'Scent remove' })
   @ApiResponse({
@@ -76,7 +87,8 @@ export class ScentController {
     description: 'Scent not found',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.scentService.remove(id);
+  remove(@Param('id') id: string, @CurrentStore() store) {
+    const storeId = store.userId;
+    return this.scentService.remove(id, storeId);
   }
 }

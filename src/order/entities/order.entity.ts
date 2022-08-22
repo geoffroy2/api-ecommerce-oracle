@@ -57,6 +57,14 @@ export class Order extends TimesTampEntities {
   @Column({ default: 0 })
   statut: number;
 
+  @ApiProperty({
+    type: String,
+  })
+  @Column({
+    nullable: true,
+  })
+  store_id: string;
+
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { eager: true })
   order_items: OrderItem[];
 

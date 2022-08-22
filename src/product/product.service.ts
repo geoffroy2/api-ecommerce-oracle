@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -58,6 +59,19 @@ export class ProductService {
     });
   }
 
+  async findProductByCurrentStore(storeId: string): Promise<Product[]> {
+    return await this.productRepository.find({
+      relations: {
+        colors: true,
+      },
+      where: {
+        categorie: {
+          store_id: storeId,
+        },
+      },
+    });
+  }
+
   async findOne(id: string): Promise<Product> {
     const product = await this.productRepository.findOne({
       relations: {
@@ -74,19 +88,28 @@ export class ProductService {
   async update(
     id: string,
     updateProductDto: UpdateProductDto,
+    storeId: string,
   ): Promise<Product> {
     const product = await this.findOne(id);
-    if (updateProductDto.image != '') {
-      await Helper.deleteFile(product.image);
+    if (storeId === product.categorie.store_id) {
+      if (updateProductDto.image != '') {
+        await Helper.deleteFile(product.image);
+      }
+      const data = Object.assign(product, updateProductDto);
+      return await this.productRepository.save(data);
+    } else {
+      throw new ForbiddenException('Vous etes pas autoriser à modifier');
     }
-    const data = Object.assign(product, updateProductDto);
-    return await this.productRepository.save(data);
   }
 
-  async remove(id: string) {
+  async remove(id: string, storeId: string) {
     const product = await this.findOne(id);
-    await Helper.deleteFile(product.image);
-    return await this.productRepository.remove(product);
+    if (storeId === product.categorie.store_id) {
+      await Helper.deleteFile(product.image);
+      return await this.productRepository.remove(product);
+    } else {
+      throw new ForbiddenException('Vous etes pas autoriser à supprimer');
+    }
   }
 
   async deleteAll() {
