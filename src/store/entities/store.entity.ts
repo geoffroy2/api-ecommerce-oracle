@@ -57,6 +57,26 @@ export class Store extends TimesTampEntities {
   common: string;
 
   @ApiProperty({
+    type: String,
+    required: true,
+  })
+  @Column({
+    length: 30,
+    nullable: true,
+  })
+  email: string;
+
+  @ApiProperty({
+    type: String,
+    required: true,
+  })
+  @Column({
+    length: 200,
+    nullable: true,
+  })
+  password: string;
+
+  @ApiProperty({
     type: Number,
     default: 1,
   })

@@ -23,8 +23,10 @@ export class ProductService {
     private scentService: ScentService,
   ) {}
   async create(createProductDto: CreateProductDto): Promise<Product> {
+    const unique_code = Math.random().toString(36).substring(8);
     const newStore = this.productRepository.create({
-      code: Math.random().toString(36).substring(10),
+      code: unique_code,
+      key: unique_code,
       title: createProductDto.title,
       description: createProductDto.description,
       price: createProductDto.price,
@@ -106,7 +108,11 @@ export class ProductService {
   }
 
   async getImage(name: string): Promise<Product> {
-    return await this.productRepository.findOneBy({ image: name });
+    const product: Product = await this.productRepository.findOneBy({
+      image: name,
+    });
+    if (!product) throw new NotFoundException('Product  not found');
+    return product;
   }
 
   async getProductByCategorie(category_id: string): Promise<Product[]> {

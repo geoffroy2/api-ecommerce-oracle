@@ -23,10 +23,10 @@ export class OrderItem {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ nullable: true })
   color: string;
 
-  @Column()
+  @Column({ nullable: true })
   scent: string;
 
   @Column()

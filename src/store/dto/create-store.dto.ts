@@ -28,4 +28,10 @@ export class CreateStoreDto {
 
   @IsOptional()
   image_url: string;
+
+  @IsNotEmpty()
+  password: string;
+
+  @IsNotEmpty()
+  email: string;
 }

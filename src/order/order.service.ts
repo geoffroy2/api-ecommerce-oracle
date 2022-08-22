@@ -53,9 +53,9 @@ export class OrderService {
         const orderItem = new OrderItem();
         orderItem.order = order;
         orderItem.product_code = product.code;
-        orderItem.categorie = product.categorie.name;
-        orderItem.color = this.color ? this.color.title : '';
-        orderItem.scent = this.scent ? this.scent.title : '';
+        // orderItem.categorie = product.categorie.name;
+        // orderItem.color = this.color ? this.color.title : '';
+        // orderItem.scent = this.scent ? this.scent.title : '';
         orderItem.product_title = product.title;
         orderItem.price = product.price;
         orderItem.product_title = product.title;

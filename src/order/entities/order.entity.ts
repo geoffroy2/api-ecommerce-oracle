@@ -57,18 +57,6 @@ export class Order extends TimesTampEntities {
   @Column({ default: 0 })
   statut: number;
 
-  //   @ManyToOne(() => Link, (link) => link.orders, {
-  //     createForeignKeyConstraints: false,
-  //   })
-  //   @JoinColumn({
-  //     referencedColumnName: 'code',
-  //     name: 'code',
-  //   })
-  //   link: Link;
-
-  //   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
-  //   order_items: OrderItem[];
-
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { eager: true })
   order_items: OrderItem[];
 

@@ -195,7 +195,9 @@ export class ProductController {
   @Get('images/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.productService.getImage(image));
+    console.log('test');
     const product: Product = await this.productService.getImage(image);
+
     return res.sendFile(product.image, { root: './images' });
   }
 
@@ -239,22 +241,35 @@ export class ProductController {
   @ApiBadRequestResponse()
   @Patch(':id')
   @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: Helper.destinationPath,
-        filename: Helper.customFileName,
-      }),
-    }),
+    FileFieldsInterceptor(
+      [
+        { name: 'image', maxCount: 1 },
+        { name: 'pictures', maxCount: 3 },
+      ],
+      {
+        storage: diskStorage({
+          destination: Helper.destinationPath,
+          filename: Helper.customFileName,
+        }),
+      },
+    ),
   )
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles()
+    files: {
+      image?: Express.Multer.File[];
+      pictures?: Express.Multer.File[];
+    },
+    @Req() req: Request,
   ) {
-    if (file) {
-      if (file.filename != '') {
-        console.log(file.filename);
-        updateProductDto.image = file.filename;
+    if (files) {
+      if (files.image[0].filename != '') {
+        updateProductDto.image = files.image[0].filename;
+        updateProductDto.image_url = `${req.protocol}://${req.get(
+          'Host',
+        )}/product/${files.image[0].path}`;
       }
     }
     //Find COLOR

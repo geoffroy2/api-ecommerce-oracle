@@ -30,6 +30,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { LoginStoreDto } from './dto/login-store.dto';
 
 @ApiTags('/store')
 @Controller('store')
@@ -55,7 +56,7 @@ export class StoreController {
     },
   })
   @ApiOperation({ summary: 'Create Store' })
-  @ApiOkResponse({ type: Store, description: 'Product Store' })
+  @ApiOkResponse({ type: Store, description: ' Store' })
   @ApiBadRequestResponse()
   @Post()
   @UseInterceptors(
@@ -77,6 +78,13 @@ export class StoreController {
     }`;
 
     return this.storeService.create(createStoreDto);
+  }
+
+  @ApiOperation({ summary: 'Login Store' })
+  @ApiOkResponse({ type: Store, description: 'Login store' })
+  @Post('/login')
+  login(@Body() loginStoreDto: LoginStoreDto): Promise<{ token: string }> {
+    return this.storeService.login(loginStoreDto);
   }
 
   @ApiOkResponse({ type: Store, isArray: true })
@@ -141,11 +149,15 @@ export class StoreController {
     @Param('id') id: string,
     @Body() updateStoreDto: UpdateStoreDto,
     @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
   ) {
     if (file) {
       if (file.filename != '') {
         console.log(file.filename);
         updateStoreDto.image = file.filename;
+        updateStoreDto.image_url = `${req.protocol}://${req.get(
+          'Host',
+        )}/store/${file.path}`;
       }
     }
     return this.storeService.update(id, updateStoreDto);

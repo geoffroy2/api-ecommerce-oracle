@@ -1,0 +1,6 @@
+apps:
+  - script: ./dist/main.js
+    name: ecommerce
+    watch: true
+    instances: max
+    exec_mode: cluster

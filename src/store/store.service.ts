@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Helper } from 'src/commons/shared/helpers';
@@ -10,13 +11,21 @@ import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { Store } from './entities/store.entity';
 
+import * as bcrypt from 'bcryptjs';
+
+import { JwtService } from '@nestjs/jwt';
+import JwtUtils from 'src/shared/utils/jwt.utils';
+import { LoginStoreDto } from './dto/login-store.dto';
 @Injectable()
 export class StoreService {
   constructor(
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
+    private jwtService: JwtService,
   ) {}
-  async create(createStoreDto: CreateStoreDto): Promise<Store> {
+  async create(createStoreDto: CreateStoreDto): Promise<any> {
+    createStoreDto.password = await bcrypt.hash(createStoreDto.password, 10);
+    console.log(createStoreDto.password);
     const newStore = this.storeRepository.create({
       name: createStoreDto.name,
       city: createStoreDto.city,
@@ -26,11 +35,14 @@ export class StoreService {
       telephone_number: createStoreDto.telephone_number,
       image: createStoreDto.image,
       image_url: createStoreDto.image_url,
+      password: createStoreDto.password,
     });
     try {
-      return await this.storeRepository.save(newStore);
+      const store = await this.storeRepository.save(newStore);
+      const token = await JwtUtils.assignJwtToken(store.id, this.jwtService);
+      return { store, token };
     } catch (error) {
-      throw new ConflictException('Store Already exists');
+      throw new ConflictException(error);
     }
   }
 
@@ -69,5 +81,26 @@ export class StoreService {
 
   async deleteAll() {
     return await this.storeRepository.delete({});
+  }
+
+  async login(loginStoreDto: LoginStoreDto): Promise<{ token: string }> {
+    const { email, password } = loginStoreDto;
+    const foundStore = await this.storeRepository.findOne({ where: { email } });
+    if (!foundStore) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isPasswordMatched = await bcrypt.compare(
+      password,
+      foundStore.password,
+    );
+
+    if (!isPasswordMatched) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const token = await JwtUtils.assignJwtToken(foundStore.id, this.jwtService);
+
+    return { token };
   }
 }

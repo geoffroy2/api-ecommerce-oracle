@@ -31,6 +31,9 @@ export class Product extends TimesTampEntities {
   @Column({ unique: true })
   code: string;
 
+  @Column({ nullable: true })
+  key: string;
+
   @ApiProperty({
     type: String,
   })

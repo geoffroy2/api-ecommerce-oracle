@@ -57,7 +57,6 @@ export class CategorieController {
   @ApiOperation({ summary: 'Create Categorie' })
   @ApiOkResponse({ type: Categorie, description: 'Categorie Create' })
   @ApiBadRequestResponse()
-  @Post()
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -66,11 +65,14 @@ export class CategorieController {
       }),
     }),
   )
+  @Post()
   create(
     @Body() createCategorieDto: CreateCategorieDto,
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
+    console.log(file);
+    console.log(createCategorieDto);
     createCategorieDto.image = file.filename;
     createCategorieDto.image_url = `${req.protocol}://${req.get(
       'Host',
@@ -151,7 +153,7 @@ export class CategorieController {
         updateCategorieDto.image = file.filename;
         updateCategorieDto.image_url = `${req.protocol}://${req.get(
           'Host',
-        )}/store/${file.path}`;
+        )}/categorie/${file.path}`;
       }
     }
     return this.categorieService.update(id, updateCategorieDto);
