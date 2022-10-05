@@ -19,9 +19,10 @@ services:
   reverse-proxy:
     build:
       context: ./reverse-proxy
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - backend
 
