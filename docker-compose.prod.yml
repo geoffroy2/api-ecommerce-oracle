@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+    container_name: backend
+    hostname: backend
     ports:
       - 3000:3000
     volumes:
