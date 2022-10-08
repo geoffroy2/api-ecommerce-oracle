@@ -41,27 +41,29 @@
 
 #-------------------- GOOD ONE , NEST ERROR----------------------------------------
 
-# FROM node:18-alpine as development
+FROM node:18-alpine  As build
 
-# LABEL version="1.0" descritpion="Node image prod"
+LABEL version="1.0" descritpion="Node image prod"
 
-# WORKDIR /appecomme/src/app
+WORKDIR /appecomme/src/app
 
-# COPY ./package.json ./
+COPY ./package.json ./
 
-# RUN npm install 
+RUN npm install 
 
-# COPY . .
+COPY . .
 
-# RUN npm run build
+RUN npm run build
+
+RUN npm ci --only=production && npm cache clean --force
 
 
 
 
 
-# FROM node:18-alpine as production
+FROM node:18-alpine as production
 
-# LABEL version="1.0" descritpion="Node image prod"
+LABEL version="1.0" descritpion="Node image prod"
 
 # WORKDIR /appecomme/src/app
 
@@ -69,12 +71,15 @@
 
 # RUN npm install  pm2 -g  --only=production
 
-# COPY --from=development /appecomme/src/app/dist ./dist
+# COPY --from=build /appecomme/src/app/dist ./dist
 
-# COPY --from=development /appecomme/src/app/package.json .
+# COPY --from=build /appecomme/src/app/package.json .
+
+COPY --chown=node:node --from=build /appecomme/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /appecomme/src/app/dist ./dist
 
 
-# CMD [ "node", "dist/main.js" ]
+CMD [ "node", "dist/main.js" ]
 
 #*******************************--------------------------
 
@@ -84,32 +89,32 @@
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:18-alpine As build
+# FROM node:18-alpine As build
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+# COPY --chown=node:node package*.json ./
 
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
+# COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
 
-COPY --chown=node:node . .
+# COPY --chown=node:node . .
 
-RUN npm run build
+# RUN npm run build
 
-ENV NODE_ENV production
+# ENV NODE_ENV production
 
-RUN npm ci --only=production && npm cache clean --force
+# RUN npm ci --only=production && npm cache clean --force
 
-USER node
+# USER node
 
-###################
-# PRODUCTION
-###################
+# ###################
+# # PRODUCTION
+# ###################
 
-FROM node:18-alpine As production
+# FROM node:18-alpine As production
 
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+# COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+# COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-CMD [ "node", "dist/main.js" ]
+# CMD [ "node", "dist/main.js" ]
 

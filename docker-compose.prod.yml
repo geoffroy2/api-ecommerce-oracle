@@ -10,8 +10,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      # - .:/appecomme/src/app
-      - .:/usr/src/app
+      - .:/appecomme/src/app
+      # - .:/usr/src/app
     # command: npm run start:debug
     depends_on:
       - postgres
