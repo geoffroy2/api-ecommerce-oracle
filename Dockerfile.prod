@@ -17,23 +17,60 @@
 # CMD [ "npm", "run","prod" ]
 
 
-FROM node:lts-alpine
+# FROM node:lts-alpine
+# WORKDIR /appecomme/src/app
+# COPY package*.json ./
+# RUN npm install 
+# RUN npm install glob rimraf
+# COPY . .
+# RUN npm run build
+
+
+
+# FROM node:lts-alpine
+
+# WORKDIR /appecomme/src/app
+# # COPY package.json ./
+# RUN npm install pm2 -g --only=production
+# # COPY . .
+
+# COPY --from=development  --chmod=777 /appecomme/src/app ./
+
+# CMD npm run start:prod
+
+
+#-----------------TEST-----------------------------------
+
+FROM node:14 AS development
+
+# Specify Working directory inside container
 WORKDIR /appecomme/src/app
+
+# Copy package-lock.json & package.json from host to inside container working directory
 COPY package*.json ./
-RUN npm install 
-RUN npm install glob rimraf
-COPY . .
+
+# Install deps inside container
+RUN npm install
+
 RUN npm run build
 
+EXPOSE 3000
 
+################
+## PRODUCTION ##
+################
+# Build another image named production
+FROM node:14 AS production
 
-FROM node:lts-alpine
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
+# Set work dir
 WORKDIR /appecomme/src/app
-# COPY package.json ./
-RUN npm install pm2 -g --only=production
-# COPY . .
 
-COPY --from=development  --chmod=777 /appecomme/src/app ./
+COPY --from=development /appecomme/src/app .
 
-CMD npm run start:prod
+EXPOSE 3000
+
+# run app
+CMD [ "node", "dist/main"]
