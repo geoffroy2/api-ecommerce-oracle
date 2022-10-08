@@ -49,7 +49,7 @@ WORKDIR /appecomme/src/app
 
 COPY ./package.json ./
 
-RUN npm install bcryptjs
+RUN npm install 
 
 COPY . .
 
