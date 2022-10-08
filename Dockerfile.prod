@@ -75,8 +75,8 @@ LABEL version="1.0" descritpion="Node image prod"
 
 # COPY --from=build /appecomme/src/app/package.json .
 
-COPY --chown=node:node --from=build /appecomme/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /appecomme/src/app/dist ./dist
+COPY  --from=build /appecomme/src/app/node_modules ./node_modules
+COPY  --from=build /appecomme/src/app/dist ./dist
 
 
 CMD [ "node", "dist/main.js" ]
