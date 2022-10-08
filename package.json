@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.1.0",
