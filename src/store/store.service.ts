@@ -11,7 +11,9 @@ import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { Store } from './entities/store.entity';
 
-import * as bcrypt from 'bcryptjs';
+// import * as bcrypt from 'bcryptjs';
+
+import bcrypt = require('bcryptjs');
 
 import { JwtService } from '@nestjs/jwt';
 import JwtUtils from 'src/shared/utils/jwt.utils';
