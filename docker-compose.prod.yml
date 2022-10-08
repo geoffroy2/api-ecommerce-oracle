@@ -11,7 +11,7 @@ services:
       - 3000:3000
     volumes:
       - .:/appecomme/src/app
-    command: npm run prod
+    command: npm run start:debug
     depends_on:
       - postgres
     environment:
