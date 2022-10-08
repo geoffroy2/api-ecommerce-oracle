@@ -39,7 +39,7 @@
 # CMD npm run start:prod
 
 
-#------------------------------------------------------------
+#-------------------- GOOD ONE , NEST ERROR----------------------------------------
 
 FROM node:18-alpine as development
 
@@ -74,4 +74,4 @@ COPY --from=development /appecomme/src/app/dist ./dist
 COPY --from=development /appecomme/src/app/package.json .
 
 
-CMD [ "node", "dist/main" ]
+CMD [ "node", "dist/main.js" ]
