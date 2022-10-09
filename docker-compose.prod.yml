@@ -29,7 +29,6 @@ services:
       - 443:443
     depends_on:
       - backend
-      - postgres
 
   postgres:
     image: postgres:14.4
