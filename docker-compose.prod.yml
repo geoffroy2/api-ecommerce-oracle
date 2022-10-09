@@ -33,11 +33,13 @@ services:
   postgres:
     image: postgres:14.4
     ports:
-      - '35000:5432'
+      - '5432:5432'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: db_app_ecommerce
+    volumes:
+      - docker-nest-postgres:/var/lib/postgresql/data
 
   postgres_admin:
     image: dpage/pgadmin4:latest
@@ -48,3 +50,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: password
     ports:
       - 5050:80
+
+volumes:
+docker-nest-postgres:

@@ -18,8 +18,8 @@ import { PaymentModule } from './payment/payment.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url:
-        process.env.NODE_ENV == 'prod'
-          ? process.env.DATABASE_URLDEV
+        process.env.NODE_ENV == 'production'
+          ? process.env.DATABASE_URL
           : process.env.DATABASE_URLDEV,
       autoLoadEntities: true,
       synchronize: true,
