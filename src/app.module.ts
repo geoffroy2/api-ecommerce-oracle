@@ -19,8 +19,8 @@ import { PaymentModule } from './payment/payment.module';
       type: 'postgres',
       url:
         process.env.NODE_ENV == 'prod'
-          ? process.env.DATABASE_URLPROD
-          : process.env.DATABASE_URLPROD,
+          ? process.env.DATABASE_URLDEV
+          : process.env.DATABASE_URLDEV,
       autoLoadEntities: true,
       synchronize: true,
       ssl: true,
