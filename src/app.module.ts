@@ -24,11 +24,11 @@ import { PaymentModule } from './payment/payment.module';
       autoLoadEntities: true,
       synchronize: true,
       ssl: process.env.NODE_ENV == 'production' ? false : true,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
+      // extra: {
+      //   ssl: {
+      //     rejectUnauthorized: false,
+      //   },
+      // },
     }),
 
     CategorieModule,
