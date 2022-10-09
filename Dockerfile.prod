@@ -81,6 +81,9 @@ COPY  --from=build /appecomme/src/app/dist ./dist
 
 CMD [ "node", "dist/main.js" ]
 
+EXPOSE 3000
+
+
 #*******************************--------------------------
 
 
