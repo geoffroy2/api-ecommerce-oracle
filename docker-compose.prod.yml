@@ -52,4 +52,4 @@ services:
       - 5050:80
 
 volumes:
-docker-nest-postgres:
+  docker-nest-postgres:
