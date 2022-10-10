@@ -11,7 +11,7 @@ services:
       - 3000:3000
     volumes:
       - .:/appecomme/src/app
-      - pictures:/appecomme/src/app
+      - pictures:/media
       # - .:/usr/src/app
     # command: npm run start:debug
     depends_on:
