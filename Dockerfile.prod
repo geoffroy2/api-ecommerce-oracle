@@ -47,7 +47,7 @@ LABEL version="1.0" descritpion="Node image prod"
 
 WORKDIR /appecomme/src/app
 
-COPY images /appecomme/src/app/images
+COPY ./images /appecomme/src/app/images
 
 COPY ./package.json ./
 
