@@ -47,11 +47,15 @@ LABEL version="1.0" descritpion="Node image prod"
 
 WORKDIR /appecomme/src/app
 
+RUN mkdir -p images  
+
 COPY ./package.json ./
 
 RUN npm install 
 
 COPY . .
+
+
 
 RUN npm run build
 
