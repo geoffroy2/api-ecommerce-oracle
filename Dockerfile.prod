@@ -47,15 +47,13 @@ LABEL version="1.0" descritpion="Node image prod"
 
 WORKDIR /appecomme/src/app
 
-ADD images /appecomme/src/app/images
+
 
 COPY ./package.json ./
 
 RUN npm install 
 
 COPY . .
-
-
 
 RUN npm run build
 
@@ -82,6 +80,7 @@ LABEL version="1.0" descritpion="Node image prod"
 COPY  --from=build /appecomme/src/app/node_modules ./node_modules
 COPY  --from=build /appecomme/src/app/dist ./dist
 
+RUN mkdir -p /appecomme/src/app/dist/images  
 
 CMD [ "node", "dist/main.js" ]
 
