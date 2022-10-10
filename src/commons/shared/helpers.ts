@@ -21,7 +21,7 @@ export class Helper {
 
   static destinationPath(req, file, cb) {
     process.env.NODE_ENV == 'production'
-      ? cb(null, '/images/')
+      ? cb(null, '/pictures/')
       : cb(null, './images/');
   }
 
