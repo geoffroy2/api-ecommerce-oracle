@@ -80,7 +80,7 @@ LABEL version="1.0" descritpion="Node image prod"
 COPY  --from=build /appecomme/src/app/node_modules ./node_modules
 COPY  --from=build /appecomme/src/app/dist ./dist
 
-RUN mkdir -p /appecomme/src/app/dist/images  
+RUN mkdir -p /appecomme/src/app/images  
 
 CMD [ "node", "dist/main.js" ]
 
