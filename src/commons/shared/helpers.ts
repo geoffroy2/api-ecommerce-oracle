@@ -20,7 +20,9 @@ export class Helper {
   }
 
   static destinationPath(req, file, cb) {
-    cb(null, './images/');
+    process.env.NODE_ENV == 'production'
+      ? cb(null, 'pictures:/media/')
+      : cb(null, './images/');
   }
 
   static async deleteFile(filename: string) {
