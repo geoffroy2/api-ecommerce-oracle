@@ -101,11 +101,13 @@ export class StoreController {
     return this.storeService.deleteAll();
   }
 
-  @Get('images/:image')
+  // @Get('images/:image')
+  @Get('usr/src/app/public/upload/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.storeService.getImage(image));
     const store: Store = await this.storeService.getImage(image);
-    return res.sendFile(store.image, { root: './images' });
+    return res.sendFile(store.image, { root: '/usr/src/app/public/upload/' });
+    // return res.sendFile(store.image, { root: './images' });
   }
 
   @ApiOkResponse({ type: Store })
