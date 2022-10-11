@@ -102,7 +102,7 @@ export class StoreController {
   }
 
   // @Get('images/:image')
-  @Get('usr/src/app/public/upload/:image')
+  @Get('/usr/src/app/public/upload/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.storeService.getImage(image));
     const store: Store = await this.storeService.getImage(image);
