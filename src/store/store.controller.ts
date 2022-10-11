@@ -106,7 +106,7 @@ export class StoreController {
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.storeService.getImage(image));
     const store: Store = await this.storeService.getImage(image);
-    return res.sendFile(store.image, { root: '/usr/src/app/public/upload/' });
+    return res.sendFile(store.image, { root: './usr/src/app/public/upload' });
     // return res.sendFile(store.image, { root: './images' });
   }
 
