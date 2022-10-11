@@ -73,7 +73,7 @@ export class StoreController {
     @Req() req: Request,
   ) {
     createStoreDto.image = file.filename;
-    createStoreDto.image_url = `${req.protocol}://${req.get('Host')}/store/${
+    createStoreDto.image_url = `${req.protocol}://${req.get('Host')}/api/store${
       file.path
     }`;
 
