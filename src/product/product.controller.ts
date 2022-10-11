@@ -165,7 +165,7 @@ export class ProductController {
     // insert picture
     for (let index = 0; index < files.pictures.length; index++) {
       const filename = files.pictures[index].filename;
-      const image_url = `${req.protocol}://${req.get('Host')}/product/${
+      const image_url = `${req.protocol}://${req.get('Host')}/api/product${
         files.pictures[index].path
       }`;
       await this.pictureService.create(filename, image_url, product.id);
@@ -204,13 +204,13 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-  @Get('images/:image')
+  @Get('/usr/src/app/public/upload/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.productService.getImage(image));
     console.log('test');
     const product: Product = await this.productService.getImage(image);
 
-    return res.sendFile(product.image, { root: './images' });
+    return res.sendFile(product.image, { root: './usr/src/app/public/upload' });
   }
 
   @ApiOkResponse({ type: Product })
