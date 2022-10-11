@@ -31,6 +31,7 @@ export class StoreService {
     const newStore = this.storeRepository.create({
       name: createStoreDto.name,
       city: createStoreDto.city,
+      email: createStoreDto.email,
       common: createStoreDto.common,
       status: createStoreDto.status,
       location: createStoreDto.location,

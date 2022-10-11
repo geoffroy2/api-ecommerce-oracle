@@ -63,6 +63,7 @@ export class Store extends TimesTampEntities {
   @Column({
     length: 30,
     nullable: true,
+    unique: true,
   })
   email: string;
 
@@ -102,7 +103,11 @@ export class Store extends TimesTampEntities {
   @ApiProperty({
     type: String,
   })
-  @Column({})
+  @Column({
+    type: String,
+    nullable: false,
+    unique: true,
+  })
   telephone_number: string;
 
   @OneToMany(() => Categorie, (categorie) => categorie.store, {
