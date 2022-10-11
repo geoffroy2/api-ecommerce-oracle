@@ -61,8 +61,6 @@ RUN npm ci --only=production && npm cache clean --force
 
 
 
-
-
 FROM node:18-alpine as production
 
 LABEL version="1.0" descritpion="Node image prod"
@@ -81,10 +79,13 @@ COPY  --from=build /appecomme/src/app/node_modules ./node_modules
 COPY  --from=build /appecomme/src/app/dist ./dist
 
 # RUN mkdir -p /appecomme/src/app/images  
-
-CMD [ "node", "dist/main.js" ]
+RUN npm install pm2 -g
 
 EXPOSE 3000
+
+CMD [ "pm2-runtime", "dist/main.js" ]
+
+
 
 
 #*******************************--------------------------
