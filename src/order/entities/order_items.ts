@@ -31,7 +31,7 @@ export class OrderItem {
   @Column({ nullable: true })
   scent: string;
 
-  @Column()
+  @Column({ nullable: true })
   categorie: string;
 
   @Column()
@@ -64,6 +64,14 @@ export class OrderItem {
     default: false,
   })
   complete: boolean;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Column({
+    nullable: true,
+  })
+  category_id: string;
 
   @ApiProperty({
     type: String,

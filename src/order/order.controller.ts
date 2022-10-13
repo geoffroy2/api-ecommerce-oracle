@@ -58,6 +58,13 @@ export class OrderController {
     return this.orderService.findAll();
   }
 
+  @ApiOkResponse()
+  @ApiOperation({ summary: 'Deleted All Order' })
+  @Get('deleteall')
+  deleteAll() {
+    return this.orderService.deleteAll();
+  }
+
   @UseGuards(AuthGuard())
   @ApiOperation({ summary: 'Get All Order' })
   @ApiOkResponse({ type: Order, isArray: true })

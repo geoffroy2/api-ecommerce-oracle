@@ -68,6 +68,7 @@ export class OrderService {
         orderItem.price = product.price;
         orderItem.product_title = product.title;
         orderItem.store_id = category.store_id;
+        orderItem.category_id = category.id;
         orderItem.quantity = p.quantity;
         orderItem.total = p.quantity * product.price;
         this.orderItemRepository.save(orderItem);
