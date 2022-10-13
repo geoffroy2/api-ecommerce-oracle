@@ -58,24 +58,24 @@ export class Order extends TimesTampEntities {
   @Column({ default: 0 })
   statut: number;
 
-  @ApiProperty({
-    type: String,
-  })
-  @Column({
-    nullable: true,
-  })
-  store_id: string;
+  // @ApiProperty({
+  //   type: String,
+  // })
+  // @Column({
+  //   nullable: true,
+  // })
+  // store_id: string;
 
-  @ManyToOne(() => Store, (store) => store.id, {
-    createForeignKeyConstraints: false,
-    // eager: true,
-    nullable: true,
-  })
-  @JoinColumn({
-    name: 'store_id',
-    referencedColumnName: 'id',
-  })
-  store: Store;
+  // @ManyToOne(() => Store, (store) => store.id, {
+  //   createForeignKeyConstraints: false,
+  //   // eager: true,
+  //   nullable: true,
+  // })
+  // @JoinColumn({
+  //   name: 'store_id',
+  //   referencedColumnName: 'id',
+  // })
+  // store: Store;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { eager: true })
   order_items: OrderItem[];

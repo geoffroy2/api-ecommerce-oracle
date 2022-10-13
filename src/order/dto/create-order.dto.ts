@@ -34,5 +34,6 @@ export class CreateOrderDto {
     quantity: number;
     color_id: string;
     scent_id: string;
+    store_id: string;
   }[];
 }
