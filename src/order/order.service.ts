@@ -147,4 +147,9 @@ export class OrderService {
       throw new ConflictException(error);
     }
   }
+
+  async deleteAll() {
+    await this.orderItemRepository.delete({});
+    return await this.orderRepository.delete({});
+  }
 }
