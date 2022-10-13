@@ -5,6 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CategorieService } from 'src/categorie/categorie.service';
+import { Categorie } from 'src/categorie/entities/categorie.entity';
 
 import { Color } from 'src/colors/entities/color.entity';
 import { Product } from 'src/product/entities/product.entity';
@@ -27,6 +29,7 @@ export class OrderService {
     @InjectRepository(OrderItem)
     private orderItemRepository: Repository<OrderItem>,
     private productService: ProductService,
+    private categorieService: CategorieService,
   ) {}
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const newOrder = this.orderRepository.create({
@@ -50,6 +53,10 @@ export class OrderService {
         if (p.color_id != undefined || p.color_id != '') {
           this.color = await this.productService.getOneColor(p.color_id);
         }
+        const category_id = product.category_id;
+        const category: Categorie = await this.categorieService.findOne(
+          category_id,
+        );
 
         const orderItem = new OrderItem();
         orderItem.order = order;
@@ -60,7 +67,7 @@ export class OrderService {
         orderItem.product_title = product.title;
         orderItem.price = product.price;
         orderItem.product_title = product.title;
-        orderItem.store_id = p.store_id;
+        orderItem.store_id = category.store_id;
         orderItem.quantity = p.quantity;
         orderItem.total = p.quantity * product.price;
         this.orderItemRepository.save(orderItem);

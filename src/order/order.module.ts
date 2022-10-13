@@ -9,11 +9,13 @@ import { ScentModule } from 'src/scent/scent.module';
 import { ColorsModule } from 'src/colors/colors.module';
 import { ProductModule } from 'src/product/product.module';
 import { PassportModule } from '@nestjs/passport';
+import { CategorieModule } from 'src/categorie/categorie.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, OrderItem]),
     ProductModule,
+    CategorieModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [OrderController],
