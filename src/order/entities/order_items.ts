@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Store } from 'src/store/entities/store.entity';
 import {
   Column,
   Entity,
@@ -62,6 +64,25 @@ export class OrderItem {
     default: false,
   })
   complete: boolean;
+
+  @ApiProperty({
+    type: String,
+  })
+  @Column({
+    nullable: true,
+  })
+  store_id: string;
+
+  @ManyToOne(() => Store, (store) => store.id, {
+    createForeignKeyConstraints: false,
+    // eager: true,
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'store_id',
+    referencedColumnName: 'id',
+  })
+  store: Store;
 
   @ManyToOne(() => Order, (order) => order.order_items)
   @JoinColumn({ name: 'order_id' })
