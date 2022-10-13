@@ -60,7 +60,7 @@ export class OrderService {
         orderItem.product_title = product.title;
         orderItem.price = product.price;
         orderItem.product_title = product.title;
-        orderItem.store_id = product.categorie.store_id;
+        // orderItem.store_id = product.categorie.store_id;
         orderItem.quantity = p.quantity;
         orderItem.total = p.quantity * product.price;
         this.orderItemRepository.save(orderItem);
