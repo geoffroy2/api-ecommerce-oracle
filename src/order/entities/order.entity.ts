@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { TimesTampEntities } from 'src/commons/generics/timestamps';
 import { Payment } from 'src/payment/entities/payment.entity';
+import { Store } from 'src/store/entities/store.entity';
 import {
   Column,
   Entity,
@@ -64,6 +65,17 @@ export class Order extends TimesTampEntities {
     nullable: true,
   })
   store_id: string;
+
+  @ManyToOne(() => Store, (store) => store.id, {
+    createForeignKeyConstraints: false,
+    // eager: true,
+    nullable: true,
+  })
+  @JoinColumn({
+    name: 'store_id',
+    referencedColumnName: 'id',
+  })
+  store: Store;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { eager: true })
   order_items: OrderItem[];
