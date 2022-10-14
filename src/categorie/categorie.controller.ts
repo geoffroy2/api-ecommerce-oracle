@@ -80,7 +80,7 @@ export class CategorieController {
     createCategorieDto.image = file.filename;
     createCategorieDto.image_url = `${req.protocol}://${req.get(
       'Host',
-    )}/categorie/${file.path}`;
+    )}/api/categorie${file.path}`;
     return this.categorieService.create(createCategorieDto);
   }
 
@@ -115,11 +115,13 @@ export class CategorieController {
   }
 
   @UseGuards(AuthGuard())
-  @Get('images/:image')
+  @Get('/usr/src/app/public/upload/:image')
   async getImage(@Param('image') image: string, @Res() res) {
     console.log(this.categorieService.getImage(image));
     const categorie: Categorie = await this.categorieService.getImage(image);
-    return res.sendFile(categorie.image, { root: './images' });
+    return res.sendFile(categorie.image, {
+      root: './usr/src/app/public/upload',
+    });
   }
 
   @UseGuards(AuthGuard())
