@@ -48,6 +48,7 @@ export class OrderController {
   @ApiBadRequestResponse()
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
+    console.log('-----------------', createOrderDto);
     return this.orderService.create(createOrderDto);
   }
 
