@@ -29,7 +29,7 @@ export class CreateOrderDto {
 
   @IsOptional()
   @IsString()
-  longitude: string;
+  longitu: string;
 
   @IsOptional()
   @IsString()

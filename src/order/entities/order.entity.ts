@@ -72,7 +72,7 @@ export class Order extends TimesTampEntities {
   @Column({
     nullable: true,
   })
-  longitude: string;
+  longitu: string;
 
   @ApiProperty({
     type: String,

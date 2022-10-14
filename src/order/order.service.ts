@@ -37,7 +37,7 @@ export class OrderService {
       // total_order: createOrderDto.total_order,
       status: createOrderDto.status,
       latitude: createOrderDto.latitude,
-      longitude: createOrderDto.longitude,
+      longitu: createOrderDto.longitu,
       statut: createOrderDto.statut,
       user_number: createOrderDto.user_number,
     });
