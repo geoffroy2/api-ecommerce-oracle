@@ -28,12 +28,12 @@ export class CreateOrderDto {
   store_id: string;
 
   @IsOptional()
-  @IsString()
-  longitude: string;
+  @IsNumber()
+  longitude: number;
 
   @IsOptional()
-  @IsString()
-  latitude: string;
+  @IsNumber()
+  latitude: number;
 
   @IsNotEmpty()
   @IsArray()

@@ -67,20 +67,20 @@ export class Order extends TimesTampEntities {
   store_id: string;
 
   @ApiProperty({
-    type: String,
+    type: Number,
   })
   @Column({
     nullable: true,
   })
-  longitude: string;
+  longitude: number;
 
   @ApiProperty({
-    type: String,
+    type: Number,
   })
   @Column({
     nullable: true,
   })
-  latitude: string;
+  latitude: number;
 
   @ManyToOne(() => Store, (store) => store.id, {
     createForeignKeyConstraints: false,
