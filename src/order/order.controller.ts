@@ -48,8 +48,6 @@ export class OrderController {
   @ApiBadRequestResponse()
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
-    createOrderDto.latitude = Number(createOrderDto.latitude);
-    createOrderDto.longitude = Number(createOrderDto.longitude);
     return this.orderService.create(createOrderDto);
   }
 
