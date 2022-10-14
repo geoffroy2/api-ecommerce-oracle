@@ -27,6 +27,14 @@ export class CreateOrderDto {
   @IsString()
   store_id: string;
 
+  @IsOptional()
+  @IsString()
+  longitude: string;
+
+  @IsOptional()
+  @IsString()
+  latitude: string;
+
   @IsNotEmpty()
   @IsArray()
   products: {
