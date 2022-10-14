@@ -66,13 +66,13 @@ export class Order extends TimesTampEntities {
   })
   store_id: string;
 
-  // @ApiProperty({
-  //   type: String,
-  // })
-  // @Column({
-  //   nullable: true,
-  // })
-  // longitu: string;
+  @ApiProperty({
+    type: String,
+  })
+  @Column({
+    nullable: true,
+  })
+  longitude: string;
 
   @ApiProperty({
     type: String,
