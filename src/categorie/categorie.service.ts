@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Helper } from 'src/commons/shared/helpers';
+import { Helper } from '../commons/shared/helpers';
 import { Repository } from 'typeorm';
 import { CreateCategorieDto } from './dto/create-categorie.dto';
 import { UpdateCategorieDto } from './dto/update-categorie.dto';
@@ -26,12 +26,17 @@ export class CategorieService {
       store_id: createCategorieDto.store_id,
       image_url: createCategorieDto.image_url,
     });
-    try {
+
+    const verifyName = this.verifyNameDoesNoExist(createCategorieDto.name);
+    if (verifyName) {
       return await this.categorieRepository.save(newCategorie);
-    } catch (error) {
-      console.log(error);
-      throw new ConflictException('Catégorie Already exists');
     }
+    // try {
+    //   return await this.categorieRepository.save(newCategorie);
+    // } catch (error) {
+    //   console.log(error);
+    //   throw new ConflictException('Catégorie Already exists');
+    // }
   }
 
   async findAll(): Promise<Categorie[]> {
@@ -48,6 +53,16 @@ export class CategorieService {
       throw new NotFoundException('Categorie  not found');
     }
     return categorie;
+  }
+
+  async verifyNameDoesNoExist(name: string): Promise<boolean> {
+    const categorie = await this.categorieRepository.findOne({
+      where: { name: name },
+    });
+    if (categorie) {
+      throw new ConflictException('Categorie  not found');
+    }
+    return true;
   }
 
   async update(

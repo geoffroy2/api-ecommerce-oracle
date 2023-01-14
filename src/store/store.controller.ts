@@ -72,10 +72,13 @@ export class StoreController {
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
   ) {
-    createStoreDto.image = file.filename;
-    createStoreDto.image_url = `${req.protocol}://${req.get('Host')}/api/store${
-      file.path
-    }`;
+    if (file != undefined) {
+      console.log(file);
+      createStoreDto.image = file.filename;
+      createStoreDto.image_url = `${req.protocol}://${req.get(
+        'Host',
+      )}/api/store${file.path}`;
+    }
 
     return this.storeService.create(createStoreDto);
   }

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { TimesTampEntities } from 'src/commons/generics/timestamps';
-import { Product } from 'src/product/entities/product.entity';
+import { TimesTampEntities } from '../../commons/generics/timestamps';
+import { Product } from '../../product/entities/product.entity';
 import {
   Column,
   Entity,

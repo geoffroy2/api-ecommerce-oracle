@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Categorie } from 'src/categorie/entities/categorie.entity';
-import { TimesTampEntities } from 'src/commons/generics/timestamps';
+import { Categorie } from '../../categorie/entities/categorie.entity';
+import { TimesTampEntities } from '../../commons/generics/timestamps';
 import {
   Column,
   Entity,

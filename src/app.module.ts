@@ -23,7 +23,7 @@ import { PaymentModule } from './payment/payment.module';
           : process.env.DATABASE_URLDEV,
       autoLoadEntities: true,
       synchronize: true,
-      ssl: process.env.NODE_ENV == 'production' ? false : true,
+      ssl: process.env.NODE_ENV == 'production' ? false : false,
       // extra: {
       //   ssl: {
       //     rejectUnauthorized: false,

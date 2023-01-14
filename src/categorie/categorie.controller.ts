@@ -77,10 +77,13 @@ export class CategorieController {
   ) {
     console.log(file);
     console.log(createCategorieDto);
-    createCategorieDto.image = file.filename;
-    createCategorieDto.image_url = `${req.protocol}://${req.get(
-      'Host',
-    )}/api/categorie${file.path}`;
+    if (file != undefined) {
+      createCategorieDto.image = file.filename;
+      createCategorieDto.image_url = `${req.protocol}://${req.get(
+        'Host',
+      )}/api/categorie${file.path}`;
+    }
+
     return this.categorieService.create(createCategorieDto);
   }
 

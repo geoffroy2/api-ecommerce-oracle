@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Categorie } from 'src/categorie/entities/categorie.entity';
-import { Color } from 'src/colors/entities/color.entity';
-import { TimesTampEntities } from 'src/commons/generics/timestamps';
-import { Picture } from 'src/picture/entities/picture.entity';
-import { Scent } from 'src/scent/entities/scent.entity';
+import { Categorie } from '../../categorie/entities/categorie.entity';
+import { Color } from '../../colors/entities/color.entity';
+import { TimesTampEntities } from '../../commons/generics/timestamps';
+import { Picture } from '../../picture/entities/picture.entity';
+import { Scent } from '../../scent/entities/scent.entity';
 
 import {
   Column,

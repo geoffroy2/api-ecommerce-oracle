@@ -1,6 +1,6 @@
-import { TimesTampEntities } from 'src/commons/generics/timestamps';
-import { Product } from 'src/product/entities/product.entity';
-import { Store } from 'src/store/entities/store.entity';
+import { TimesTampEntities } from '../../commons/generics/timestamps';
+import { Product } from '../../product/entities/product.entity';
+import { Store } from '../../store/entities/store.entity';
 import {
   Column,
   Entity,
