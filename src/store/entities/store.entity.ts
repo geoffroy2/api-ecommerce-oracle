@@ -14,6 +14,7 @@ import {
     createdAt: 'DESC',
   },
 })
+
 export class Store extends TimesTampEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;

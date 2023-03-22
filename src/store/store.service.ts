@@ -26,6 +26,10 @@ export class StoreService {
     private jwtService: JwtService,
   ) {}
   async create(createStoreDto: CreateStoreDto): Promise<any> {
+    await this.findOneByEmailOrPassword(
+      createStoreDto.email,
+      createStoreDto.telephone_number,
+    );
     createStoreDto.password = await bcrypt.hash(createStoreDto.password, 10);
     console.log(createStoreDto.password);
     const newStore = this.storeRepository.create({
@@ -61,6 +65,20 @@ export class StoreService {
       throw new NotFoundException('Store  not found');
     }
     return categorie;
+  }
+
+  async findOneByEmailOrPassword(
+    email: string,
+    telephone_number: string,
+  ): Promise<true> {
+    const store = await this.storeRepository.find({
+      where: [{ email }, { telephone_number }],
+    });
+    console.log('store', store);
+    if (store && Array.isArray(store) && store.length > 0) {
+      throw new ConflictException('Email Or Number  Exist already');
+    }
+    return true;
   }
 
   async update(id: string, updateStoreDto: UpdateStoreDto): Promise<Store> {

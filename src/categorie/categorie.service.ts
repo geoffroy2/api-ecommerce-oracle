@@ -60,7 +60,7 @@ export class CategorieService {
       where: { name: name },
     });
     if (categorie) {
-      throw new ConflictException('Categorie  not found');
+      throw new ConflictException('Categorie does exist');
     }
     return true;
   }
