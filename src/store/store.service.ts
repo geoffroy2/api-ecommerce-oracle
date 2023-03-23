@@ -26,11 +26,10 @@ export class StoreService {
     private jwtService: JwtService,
   ) {}
   async create(createStoreDto: CreateStoreDto): Promise<any> {
-    /*await this.findOneByEmailOrPassword(
+    await this.findOneByEmailOrPassword(
       createStoreDto.email,
       createStoreDto.telephone_number,
-    );*/
-    console.log(createStoreDto.password);
+    );
     createStoreDto.password = await bcrypt.hash(createStoreDto.password, 10);
     console.log(createStoreDto.password);
     const newStore = this.storeRepository.create({
